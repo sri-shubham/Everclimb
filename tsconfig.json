@@ -14,5 +14,6 @@
       "phaser": ["node_modules/phaser/types/phaser.d.ts"]
     }
   },
-  "include": ["./**/*.ts"]
+  "include": ["./**/*.ts"],
+  "exclude": ["electron/**/*", "dist/**/*", "dist-electron/**/*"]
 }
