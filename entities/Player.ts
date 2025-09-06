@@ -15,7 +15,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     scene.physics.add.existing(this);
     
     // Create a simple colored rectangle as the player sprite
-    this.setDisplaySize(16, 24); // Player size
+    this.setDisplaySize(24, 48); // Player size
     this.setTint(0x00ff00); // Green color
     
     // Set physics properties
