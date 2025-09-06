@@ -1,55 +1,48 @@
 import Phaser from "phaser";
-import { HexChunkLayer } from "../render/HexChunkLayer";
-import { generateChunkInfinite, generateNextChunkInfinite, Chunk } from "../level/InfiniteGen";
-import { computeGrid } from "../engine/Grid";
+import { StonePlatform } from "../entities/StonePlatform";
 
-export class GameScene extends Phaser.Scene {
-  private curr!: Chunk;
-  private next!: Chunk | null;
-  private currLayer!: HexChunkLayer;
-  private nextLayer!: HexChunkLayer | null;
-  private scrollSpeed = 60; // px/sec upward
-  private level = 1;
 
-  constructor(){ super("Game"); }
+export default class GameScene extends Phaser.Scene {
+  constructor() {
+    super({ key: "Game" });
+  }
 
   create() {
-    const hexSize = 24;
-    this.curr = generateChunkInfinite({ hexSize, seed: 0xDEADBEEF, level: this.level });
-    this.currLayer = new HexChunkLayer(this, this.curr, 0);
-    this.add.existing(this.currLayer);
-    this.next = null; this.nextLayer = null;
+    // Debug: set background color so scene is visible
+    this.cameras.main.setBackgroundColor(0x08141a);
+    this.add.text(8, 8, 'Game Scene', { fontSize: '14px', color: '#ffffff' }).setDepth(1000);
 
-    // debug text
-    this.add.text(8,8, `Level ${this.level}`, { color:'#fff' }).setScrollFactor(0);
+    // Hex size in pixels (full width)
+    const hexSize = 32;
+
+    // Hex geometry
+    const w = hexSize; // hex full width
+    const h = (Math.sqrt(3) * w) / 2; // hex height for flat-top
+    const step = w * 0.75; // horizontal step between adjacent flat-top hex centers
+
+    // Compute how many hex columns fit horizontally so they span left->right
+    const canvasWidth = Number(this.scale.width);
+    // Use ceil to ensure the last hex reaches the right edge (adds one if needed)
+    let cols = Math.max(1, Math.ceil((canvasWidth - w) / step) + 1);
+
+    // Add one extra hex on both left and right to ensure full edge coverage
+    cols += 2;
+
+    // Total pixel width occupied by the row of hexes (for debug/centering if needed)
+    const totalWidth = (cols - 1) * step + w;
+
+    // Start X so we include one extra hex on the left; first center shifts left by one step
+    const startX = w / 2 - step;
+
+    // Place the platform so the bottoms of the hexes sit on the bottom edge of the canvas
+    const y = Number(this.scale.height) - h / 2;
+
+    // Create a stone platform spanning the full number of columns at the bottom
+    new StonePlatform(this, startX, y, cols, hexSize);
   }
 
-  update(time:number, delta:number) {
-    const dy = -this.scrollSpeed * (delta/1000); // move up
-    this.currLayer.moveBy(dy);
-    if (this.nextLayer) this.nextLayer.moveBy(dy);
-
-    const topThreshold = 120; // when top few rows approach screen top, pregen next
-    if (!this.next) {
-      // pre-generate when top is within threshold
-      if (this.currLayer.getTopY() + 100 < topThreshold) {
-        this.next = generateNextChunkInfinite(this.curr);
-        // place next above current
-        const { vStep } = computeGrid(this.curr.hexSize);
-        const offsetY = this.currLayer.getTopY() - (this.next.rows)*vStep;
-        this.nextLayer = new HexChunkLayer(this, this.next, 0);
-        this.nextLayer.y = offsetY;
-        this.add.existing(this.nextLayer);
-      }
-    } else {
-      // swap when current is mostly off-screen
-      if (this.currLayer.getBottomY() < -100) {
-        this.curr = this.next!;
-        this.currLayer.destroy();
-        this.currLayer = this.nextLayer!;
-        this.next = null; this.nextLayer = null;
-        this.level++;
-      }
-    }
+  update() {
+    // Game update loop (reserved)
   }
 }
+

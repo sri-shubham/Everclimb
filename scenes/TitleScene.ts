@@ -123,11 +123,12 @@ export class TitleScene extends Phaser.Scene {
         }).setOrigin(0.5);
         
         // Instructions
-        this.add.text(centerX, centerY, '<> Left/Right Arrow: Move\n^ Space: Jump', { 
-            fontSize: '14px', 
-            color: '#fff', 
+        this.add.text(centerX, centerY + 10, 'Arrow Keys: Jump between platforms\nCollect Food (F) for stamina\nCollect Boots (B) to avoid slipping on ice\nCollect Coins ($) for score\n\nJump up to 3 hexes high & 4 hexes across!', { 
+            fontSize: '10px', 
+            color: '#ccc', 
             fontFamily: fontFamily, 
-            align: 'center' 
+            align: 'center',
+            fontStyle: 'normal'
         }).setOrigin(0.5);
         
         // Start prompt

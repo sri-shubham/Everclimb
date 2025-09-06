@@ -445,7 +445,7 @@ export function idx(q: number, r: number, cols: number): number {
  * Convert axial coordinates to pixel coordinates (legacy function)
  */
 export function axialToPixel(q: number, r: number, hexSize: number): { x: number, y: number } {
-    const grid = new HexGrid(hexSize, HexOrientation.POINTY_TOP);
+    const grid = new HexGrid(hexSize, HexOrientation.FLAT_TOP);
     const hex = grid.createHexCoordinate(q, r);
     const pixel = grid.hexToPixel(hex);
     return { x: pixel.x, y: pixel.y };
@@ -460,12 +460,12 @@ export function computeGrid(hexSize: number, width?: number, height?: number): {
     hStep: number, 
     vStep: number 
 } {
-    const grid = new HexGrid(hexSize, HexOrientation.POINTY_TOP);
+    const grid = new HexGrid(hexSize, HexOrientation.FLAT_TOP);
     const metrics = grid.getMetrics();
     
-    // Calculate steps between hexes
-    const hStep = metrics.width * 0.75; // horizontal step for pointy-top
-    const vStep = metrics.height * 0.5;  // vertical step for pointy-top
+    // Calculate steps between hexes for flat-top orientation
+    const hStep = metrics.width * 0.75; // horizontal step for flat-top
+    const vStep = metrics.height * 0.5;  // vertical step for flat-top
     
     if (width !== undefined && height !== undefined) {
         // Calculate how many hexes fit in the given dimensions

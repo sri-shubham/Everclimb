@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { TitleScene } from "./scenes/TitleScene";
-import { GameScene } from "./scenes/GameScene";
+import GameScene from "./scenes/GameScene";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -13,6 +13,13 @@ const config: Phaser.Types.Core.GameConfig = {
     parent: "app",
   },
   backgroundColor: "#222222",
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { x: 0, y: 0 },
+      debug: false
+    }
+  }
 };
 
 const game = new Phaser.Game(config);
