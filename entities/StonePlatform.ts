@@ -3,7 +3,7 @@ import { Platform } from "./Platform";
 import Phaser from "phaser";
 
 export class StonePlatform extends Platform {
-  constructor(scene: Phaser.Scene, x: number, y: number, width: number, hexSize: number) {
-    super(scene, x, y, width, Terrain.STONE, hexSize);
+  constructor(scene: Phaser.Scene, x: number, y: number, width: number, hexSize: number, outOfBoundsIndices?: Set<number>) {
+    super(scene, x, y, width, Terrain.STONE, hexSize, outOfBoundsIndices);
   }
 }
